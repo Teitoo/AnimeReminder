@@ -9,5 +9,5 @@ public interface ProfileService {
 	
 	Profile addProfile(Profile p);
 	
-	Profile updateProfile(Long id);
+	Profile updateProfile(Long id, Profile p);
 }

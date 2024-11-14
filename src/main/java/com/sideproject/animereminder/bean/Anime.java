@@ -1,6 +1,6 @@
 package com.sideproject.animereminder.bean;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,8 +23,8 @@ public class Anime {
 	private Long Id;
 	
 	private String name;
-	private Date updateTime;
-	private int episode;
+	private LocalDateTime updateTime;
+	private Integer episode;
 	private boolean end;
 	
 	@ManyToOne

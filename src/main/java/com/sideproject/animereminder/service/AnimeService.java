@@ -1,6 +1,5 @@
 package com.sideproject.animereminder.service;
 
-import java.util.Date;
 import java.util.List;
 
 import com.sideproject.animereminder.bean.Anime;
@@ -12,7 +11,7 @@ public interface AnimeService {
 	
 	Anime addNewAnime(Anime a);
 	
-	Anime updateAnimeData(Long id, String name, Date updateTime, int episode);
+	Anime updateAnimeData(Long id, Anime a);
 	
 	void updateCurrentEpisode(Long id);
 	

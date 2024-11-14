@@ -1,6 +1,6 @@
 package com.sideproject.animereminder.service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +16,6 @@ public class AnimeServiceImpl implements AnimeService {
 	@Autowired
 	AnimeRepository aRepo;
 
-
 	@Override
 	public List<Anime> showAllAnime() {
 		return aRepo.findAll();
@@ -25,22 +24,33 @@ public class AnimeServiceImpl implements AnimeService {
 
 	@Override
 	public void deleteAnime(Long id) {
-		aRepo.deleteById(id);
-		log.info("delete id={}", id);
+		Optional <Anime> res = aRepo.findById(id);
+		if (res.isPresent()) {
+			aRepo.deleteById(id);
+			log.info("delete id={}", id);
+			return;
+		}
+		log.info("failed to delete Anime");
 	}
 
 	@Override
 	public Anime addNewAnime(Anime a) {
-		return Anime.builder().build();
+		return aRepo.save(Anime.builder()
+				.name(a.getName())
+				.episode(a.getEpisode() != null ? a.getEpisode() : 12)
+				.updateTime(a.getUpdateTime() != null ? a.getUpdateTime() : LocalDateTime.now())
+				.build());
 	}
 
 	@Override
-	public Anime updateAnimeData(Long id, String name, Date updateTime, int episode) {
+	public Anime updateAnimeData(Long id, Anime a) {
 		Optional<Anime> res = aRepo.findById(id);
-		if(res.isPresent()) {
-			Anime a = res.get();
-			a = Anime.builder().name(name).updateTime(updateTime).episode(episode).build();
-			return a;
+		if (res.isPresent()) {
+			Anime anime = res.get();
+			anime.setName(a.getName() != null ? a.getName() : anime.getName());
+			anime.setUpdateTime(a.getUpdateTime() != null ? a.getUpdateTime() : anime.getUpdateTime());
+			anime.setEpisode(a.getEpisode() != null ? a.getEpisode() : anime.getEpisode());
+			return aRepo.save(anime);
 		}
 		return null;
 	}
@@ -48,18 +58,24 @@ public class AnimeServiceImpl implements AnimeService {
 	@Override
 	public void updateCurrentEpisode(Long id) {
 		Optional<Anime> res = aRepo.findById(id);
-		if(res.isPresent()) {
+		if (res.isPresent()) {
 			Anime a = res.get();
 			int currentEpisode = a.getEpisode();
-			a.setEpisode(currentEpisode-1);
+			a.setEpisode(currentEpisode - 1);
+			aRepo.save(a);
 		}
 	}
 
 	@Override
 	public boolean checkTime(Long id) {
-		// TODO Auto-generated method stub
+		Anime res = aRepo.findById(id).get();
+		if(!res.isEnd()) {
+			LocalDateTime n = LocalDateTime.now();
+			LocalDateTime t = res.getUpdateTime();
+			if(n.isBefore(t) && n.isAfter(t.minusDays(1)))
+				return true;
+		}
 		return false;
 	}
-
 
 }

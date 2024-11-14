@@ -9,10 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Data
+@Builder
 @Table
 public class Profile {
 	@Id
@@ -21,8 +23,6 @@ public class Profile {
 	
 	private String name;
 	
-	private String email;
-	
 	@OneToMany(mappedBy = "profile", cascade = CascadeType.PERSIST)
-	private Set<Anime> s;
+	private Set<Anime> animeSet;
 }

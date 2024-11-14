@@ -1,5 +1,6 @@
 package com.sideproject.animereminder.bean;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,18 +28,15 @@ public class EntityTests {
 	
 	@Test
 	public void test1() {
-		Profile p1 = new Profile();
+		Profile p1 = Profile.builder().name("Tet").build();
 		Anime a1 = Anime.builder().name("Makeine").episode(12)
-				.updateTime(java.sql.Date.valueOf("2024-05-12")).build();
+				.updateTime(LocalDateTime.of(2024, 06, 30, 1, 0)).build();
 		Anime a2 = Anime.builder().name("Fate/Zero").episode(25)
-				.updateTime(java.sql.Date.valueOf("2015-05-12")).build();
-
-		p1.setName("Tet");
-		a2.setName("Fate/Zero");
+				.updateTime(LocalDateTime.of(2015, 06, 30, 1, 0)).build();
 
 		Set<Anime> aSet = new HashSet<>();
 		aSet.add(a1);aSet.add(a2);
-		p1.setS(aSet);
+		p1.setAnimeSet(aSet);
 
 		pRepo.save(p1);
 		aRepo.save(a1);aRepo.save(a2);
