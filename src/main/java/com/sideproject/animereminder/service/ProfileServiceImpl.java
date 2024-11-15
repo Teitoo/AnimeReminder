@@ -18,7 +18,7 @@ public class ProfileServiceImpl implements ProfileService {
 	ProfileRepository pRepo;
 
 	@Override
-	public Profile findMyProfile(Long id) {
+	public Profile findProfile(Long id) {
 		return pRepo.findById(id).orElseThrow();
 	}
 
